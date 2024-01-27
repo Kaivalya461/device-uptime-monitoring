@@ -22,6 +22,8 @@ public class PingDetails {
     private long startTimestamp; //PK2
     @Column
     private String hostIpAddress;
+
+    private int pingCount;
     List<PingTime> pingTimeList = new ArrayList<>();
 
     PingDetails(String targetIpAddress, String hostIpAddress, List<PingTime> pingTimeList) {
