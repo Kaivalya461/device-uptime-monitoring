@@ -1,6 +1,11 @@
 import groovy.json.JsonSlurper
 
-def portainerDeployment() {
+//Custom Variables
+def APP_NAME = 'device-uptime-monitoring';
+def GIT_HUB_REPO_NAME = 'https://github.com/Kaivalya461/' + APP_NAME + '.git';
+def DOCKER_IMG_NAME = 'kaivalya461/' + APP_NAME;
+
+def portainerDeployment(def stackName) {
     def accessToken = getAccessToken(
                         'https://portainer.kvhome.in/api/auth',
                         PORT_CREDS_USR,
@@ -9,7 +14,7 @@ def portainerDeployment() {
 
     createStackUsingRepository(
         accessToken,
-        'device-uptime-monitoring',
+        stackName,
         'https://github.com/Kaivalya461/kubernetes-yamls',
         'refs/heads/master',
         'Device-Uptime-Monitoring/deploy.yaml'
@@ -20,7 +25,7 @@ def portainerDeployment() {
 
 pipeline {
     environment {
-        imagename = "kaivalya461/device-uptime-monitoring:latest"
+        imagename = "${DOCKER_IMG_NAME}"
         dockerImage = ''
         PORT_CREDS = credentials('portainer-app-user')
     }
@@ -39,7 +44,7 @@ pipeline {
 
                 // Get some code from a GitHub repository
                 // Run Maven on a Unix agent.
-                git 'https://github.com/Kaivalya461/device-uptime-monitoring.git'
+                git "${GIT_HUB_REPO_NAME}";
                 sh "mvn -Dmaven.test.failure.ignore=true clean install"
 
                 echo 'Building stage finished.'
@@ -93,7 +98,7 @@ pipeline {
                 echo 'Portainer Create Stack..'
 
                 script {
-                    portainerDeployment();
+                    portainerDeployment(APP_NAME);
                 }
             }
         }
