@@ -59,10 +59,12 @@ public class InfluxDbDaoImpl implements InfluxDbDao<PingTime> {
                     .time(pingTime.getTimestamp(), WritePrecision.MS);
             writeApi.writePoint(PING_DETAILS_BUCKET_NAME, INFLUX_DB_ORG_NAME, point);
         } catch (Exception exception) {
-            log.error("InfluxDbDaoImpl::savePingTimes -> Exception while saving PingTimes into InfluxDB with errorMessage: {}, stackTrace: {}, for targetIpAddress: {},",
+            log.error("InfluxDbDaoImpl::savePingTimes -> Exception while saving PingTimes into InfluxDB for targetIpAddress: {}, with errorMessage: {}, errorCause: {}, stackTrace: {}",
+                    targetIpAddress,
                     exception.getMessage(),
-                    exception.getStackTrace(),
-                    targetIpAddress);
+                    exception.getCause(),
+                    exception.getStackTrace()
+            );
         }
     }
 
