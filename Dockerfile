@@ -1,4 +1,4 @@
 FROM amazoncorretto:11-alpine
-COPY target/device-uptime-monitoring-1.0-SNAPSHOT.jar ping-monitor-service-1.0.jar
+COPY target/device-uptime-monitoring-*.jar app.jar
 
-ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/ping-monitor-service-1.0.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=gke,prod","-jar","/app.jar"]
